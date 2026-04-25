@@ -119,15 +119,16 @@ flowchart TB
     end
 
     subgraph Federation["Federation Layer"]
-        TRINO[Trino Engine\n(Federated SQL)]
+        TRINO[Trino Engine]
     end
 
     subgraph Sources["Data Sources"]
-        PG[(Postgres\nOrders Data)]
-        MY[(MySQL\nShipments Data)]
+        PG[(Postgres - Orders)]
+        MY[(MySQL - Shipments)]
     end
 
     UI -->|SQL Queries| TRINO
     TRINO -->|Reads Data| PG
     TRINO -->|Reads Data| MY
-    TRINO -->|Returns Unified Results| UI
+    TRINO -->|Unified Results| UI
+
