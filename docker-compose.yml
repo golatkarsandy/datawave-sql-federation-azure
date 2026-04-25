@@ -1,0 +1,44 @@
+services:
+  trino:
+    image: trinodb/trino:437
+    container_name: trino
+    ports:
+      - "8080:8080"
+    volumes:
+      - C:/Users/aksha/datawave-sql-federation-azure/trino/etc:/etc/trino
+    depends_on:
+      - postgres
+      - mysql
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: logistics
+      POSTGRES_USER: trino
+      POSTGRES_PASSWORD: trino
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/init-db/postgres.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: shipments
+      MYSQL_USER: trino
+      MYSQL_PASSWORD: trino
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/init-db/mysql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  metabase:
+    image: metabase/metabase
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    depends_on:
+      - trino
