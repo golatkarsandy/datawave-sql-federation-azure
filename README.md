@@ -107,3 +107,27 @@ If you see results, federation is confirmed.
 
 This project demonstrates how Trino can unify multiple databases under a single SQL layer.
 By connecting Postgres and MySQL through Trino and validating with a cross‑database join, the project proves that federated analytics is working end‑to‑end.
+
+
+## 🌐 High‑Level Overview
+
+```mermaid
+flowchart TB
+
+    subgraph User["User / Analyst"]
+        UI[Metabase UI]
+    end
+
+    subgraph Federation["Federation Layer"]
+        TRINO[Trino Engine\n(Federated SQL)]
+    end
+
+    subgraph Sources["Data Sources"]
+        PG[(Postgres\nOrders Data)]
+        MY[(MySQL\nShipments Data)]
+    end
+
+    UI -->|SQL Queries| TRINO
+    TRINO -->|Reads Data| PG
+    TRINO -->|Reads Data| MY
+    TRINO -->|Returns Unified Results| UI
